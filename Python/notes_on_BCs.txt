@@ -1,0 +1,81 @@
+Boundary Conditions (BCs) for the 1D Shallow Water Equations (SWE). They are designed to serve as a reference for your GitHub portfolio and a "conceptual anchor" for your **NotebookLM** when transitioning to AI.
+
+---
+
+# Technical Note: Boundary Conditions in 1D Hydrodynamics
+**Project:** The Hydro-AI Bridge  
+**Subject:** Well-Posedness and Information Propagation in Subcritical Flow ($Fr < 1$)
+
+---
+
+### 1. Theoretical Foundation: The Method of Characteristics
+In hyperbolic systems like the SWE, information travels along characteristic lines at specific velocities:
+*   **$\lambda_1 = u + c$** (Information moving downstream)
+*   **$\lambda_2 = u - c$** (Information moving upstream)
+*   *Where $u$ is advective velocity and $c = \sqrt{gh}$ is celerity.*
+
+**The Golden Rule of Well-Posedness:** For a numerical solution to be stable and unique, you must provide exactly one boundary condition (instruction) for every characteristic entering the domain. 
+*   In **Subcritical Flow** ($u < c$), one characteristic enters from the left and one from the right.
+*   **Requirement:** You **must** provide exactly one BC at the inlet and one BC at the outlet.
+
+---
+
+### 2. Evaluated Configurations
+
+#### A. The "Pressure-Driven" Sloping Channel (Initial Phase)
+*   **Inlet ($x=0$):** Fixed Elevation ($\zeta = 0$).
+*   **Outlet ($x=L$):** Fixed Elevation ($\zeta = -1.0$).
+*   **Physics:** Driven by a fixed "Head" (1-meter drop). Gravity pushes the water until bed friction balances the slope.
+*   **Result:** Reaches "Normal Depth." Velocity is an *output* of the system, not a control.
+*   **Drawback:** Hard to simulate specific tidal currents ($U_{in}$) because the head is the master.
+
+#### B. The "Ill-Posed" Inlet-Only Forcing (The Failure Case)
+*   **Inlet ($x=0$):** Fixed Discharge ($q$) **and** Fixed Elevation ($\zeta$).
+*   **Outlet ($x=L$):** Floating/Zero-Gradient (Neumann).
+*   **Result:** **Numerical Evacuation (Blow-up).**
+*   **Physics:** Without a downstream "anchor" (fixed $\zeta$), the upstream-moving characteristic ($u-c$) enters from the "Sea" with no instructions. Gravity pulls water out, and the outlet simply allows it to drain. 
+*   **Numerical Signature:** Depth ($h \to 0$), Velocity ($u \to \infty$), Froude Number ($Fr \to 3000+$).
+
+#### C. The "Flux-Forced Flume" (Tidal Standard - Final Phase)
+*   **Inlet ($x=0$):** Fixed Discharge ($q = U_{target} \cdot H_{swl}$). Elevation ($\zeta$) floats (Zero-Gradient).
+*   **Outlet ($x=L$):** Fixed Elevation ($\zeta = 0.0$ at Geoid). Discharge ($q$) floats (Zero-Gradient).
+*   **Physics:** This represents a tidal strait. You "pump" a specific flux into the channel. The inlet elevation naturally rises (Backwater Effect) to create the head needed to push that flux over the friction and bathymetry.
+*   **Result:** Extremely stable. Velocity at the inlet ($u_0$) adjusts based on the "piling up" of water.
+
+---
+
+### 3. Key Conceptual Distinctions
+*   **The "Driver":** Flow is driven by the gradient of the free surface ($\partial \zeta / \partial x$), not necessarily the bed slope. In a flat channel ($S_0=0$), the water level rises at the inlet to create the downhill slope needed to move the water.
+*   **Dirichlet vs. Neumann:** 
+    *   *Dirichlet:* Specifying the value (e.g., $\zeta = 0$). Acts as a physical "anchor."
+    *   *Neumann:* Specifying the gradient (e.g., $q_i = q_{i+1}$). Acts as a "transparent window" allowing flow to pass.
+*   **Static Pond State:** By setting $U_{in} = 0$ in the Flux-Forced model, the water reaches a perfectly horizontal equilibrium with the outlet sea level. This is a vital "Zero-State" for AI training.
+
+---
+
+### 4. Implementation Logic (RK4 Snippet)
+```python
+# Inlet: The "Pump" (Tidal Flux)
+self.q[0] = self.q_target_in         # Dirichlet (Specified Flux)
+self.zeta[0] = self.zeta[1]          # Neumann (Floating Elevation)
+
+# Outlet: The "Sea" (Downstream Datum)
+self.zeta[-1] = 0.0                  # Dirichlet (Fixed Sea Level)
+self.q[-1] = self.q[-2]              # Neumann (Transmissive Exit)
+```
+
+---
+
+### 5. Recommended References
+
+1.  **Falconer, R. A. (1993).** *"Introduction to numerical modelling of hydrodynamic and advective-diffusive processes."* In: *Coastal, Estuarial and Harbour Engineer's Reference Book*. 
+    *   *Why:* This is the foundational text for the scheme used in your original FORTRAN code. It explains the central difference discretization and the logic behind depth-integrated modeling.
+2.  **Vreugdenhil, C. B. (1994).** *"Numerical Methods for Shallow-Water Flow."* Springer Science & Business Media.
+    *   *Why:* The "Bible" of SWE. Chapter 2 specifically deals with the **Method of Characteristics** and the mathematical requirements for well-posed boundary conditions in subcritical and supercritical regimes.
+3.  **Abbott, M. B. (1979).** *"Computational Hydraulics: Elements of the Theory of Free Surface Flows."* 
+    *   *Why:* Provides the classic engineering perspective on how information propagates through channels and how to handle the "Inlet-Q / Outlet-H" (Discharge/Height) boundary splits.
+
+---
+
+### Final Note for the AI Project
+When training the **Surrogate Model** or **PINN**, these boundaries are your "Hard Constraints." The AI will learn that the relationship between $U_{inflow}$ and $\zeta_{inlet}$ is a direct consequence of the channel's "Resistance" (friction + hump). If the AI predicts a flat surface while water is moving, it has failed to learn the **Boundary-Physics** relationship.

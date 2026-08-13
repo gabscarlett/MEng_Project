@@ -14,8 +14,10 @@ The project involved creating a numerical model from scratch to solve **Sobey’
 *   **Potential Applications:** Tsunami propagation modelling and predicting tidal current velocities for site resource assessments.
 
 ## Repository Structure
-*   **`/SWE`**: Contains the finite difference solver for the standard 1HD Shallow Water Equations.
-*   **`/Sobey`**: Contains the finite difference solver for Sobey's phase-resolving integral wave evolution equations.
+*   **`/Fortran`**: The original numerical code from the MEng project.
+    *   **`/Fortran/SWE`**: Finite difference solver for the standard 1D Shallow Water Equations.
+    *   **`/Fortran/Sobey`**: Finite difference solver for Sobey's phase-resolving integral wave evolution equations.
+*   **`/Python`**: Modern Python refactor of the SWE solver (`SWESolver1D.py`), including an adaptive time-stepping RK4 implementation, artificial viscosity, a parametric data factory (`generate_data.py`) for surrogate model training, and boundary-condition design notes (`notes_on_BCs.txt`).
 *   **`MEng Thesis - Gabriel T Scarlett.pdf`**: The full thesis document providing mathematical derivations, numerical implementation details, and result discussions.
 
 ## Academic Context
