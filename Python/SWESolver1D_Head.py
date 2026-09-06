@@ -2,7 +2,7 @@
 ================================================================================
 1D SHALLOW WATER EQUATIONS (SWE) SOLVER
 ================================================================================
-Developer: Gabriel Thomas Scarlett (2012 / Modernised 2026)
+Developer: Gabriel Thomas Scarlett (2015 / Modernised 2026)
 Domain: Coastal Engineering / Hydrodynamics
 
 MATHEMATICAL MODEL:

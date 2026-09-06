@@ -1,6 +1,6 @@
 # 1D Shallow Water Equations (SWE) Solver 🌊
 
-**Developer:** Gabriel Thomas Scarlett (2012 / Modernized 2026)  
+**Developer:** Gabriel Thomas Scarlett (2015 / Modernized 2026)  
 **Domain:** Coastal Engineering / Hydrodynamics  
 
 **Modern Python refactor** of the original Fortran solver `SWE_CHANNEL.f95` (see `../Fortran/SWE/`).  

@@ -1,7 +1,7 @@
 """
 Numerical Solution to the 1D Shallow Water Equations (SWE)
-Original FORTRAN Code: Gabriel Thomas Scarlett, University of Edinburgh (2012)
-Python Port & Modernization: March 2024
+Original FORTRAN Code: Gabriel Thomas Scarlett, University of Edinburgh (2015)
+Python Port & Modernization: 2026
 
 Governing Equations (Depth-Integrated Navier-Stokes):
 1. Continuity: d(zeta)/dt + d(q)/dx = 0
