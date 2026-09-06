@@ -1,4 +1,3 @@
-```markdown
 # MEng_Project: Ocean Wave Propagation in Shallow Waters
 
 This repository contains the **Fortran** numerical code developed for my MEng Thesis, **"Ocean Wave Propagation in Shallow Waters"** (2015), at the University of Edinburgh.
@@ -25,4 +24,3 @@ The project involved creating a numerical model from scratch to solve **Sobey’
 *   **Degree:** Master of Mechanical Engineering with Renewable Energy
 *   **Submission Date:** April 2015
 *   **Supervisor:** Professor Alistair Borthwick
-```

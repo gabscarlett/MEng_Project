@@ -1,6 +1,3 @@
-Here is a comprehensive and professionally formatted `README.md` based on your code and its docstrings.
-
-```markdown
 # 1D Shallow Water Equations (SWE) Solver 🌊
 
 **Developer:** Gabriel Thomas Scarlett (2012 / Modernized 2026)  
@@ -120,4 +117,3 @@ The domain acts as a forced tidal strait or channel:
 2. **Hydrostatic Pressure:** Vertical accelerations are assumed negligible.
 3. **Uniform Velocity:** The vertical velocity profile is assumed uniform (depth-averaged).
 4. **No Coriolis Effect:** Rotational forces are neglected for 1D longitudinal channel flow.
-```
